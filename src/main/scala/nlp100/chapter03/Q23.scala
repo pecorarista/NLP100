@@ -15,7 +15,7 @@ object Q23 extends App {
           .matchData
           .foreach(
             m => {
-              val sectionLevel: Int = m.group(1).length - 1
+              val sectionLevel = m.group(1).length - 1
               val sectionName = m.group(2).trim
               println(s"$sectionName ($sectionLevel)")
             }
