@@ -2,10 +2,10 @@ package nlp100.chapter02
 
 import scala.io.Source
 
-object Q14 {
+object Q15 {
 
-  def first(n: Int) =
+  def last(n: Int) =
     Source.fromURL(getClass.getResource("/hightemp.txt"))
-      .getLines.take(n).foreach(println(_))
+      .getLines.toList.reverse.take(n).reverse.foreach(println(_))
 
 }
