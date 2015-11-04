@@ -6,14 +6,13 @@ import scala.io.StdIn
 object Q15 extends App {
 
   val POSITIVE_INT = "正の整数で入力してください"
-  val TOO_LONG = "入力された数字%dが全体の行数%dより大きいので全体を表示しています。"
+  val TOO_LONG = "入力された数%dが全体の行数%dより大きいので全体を表示しています。"
 
   while(true) {
     println("末尾の何行を表示しますか。（Ctrl-C で終了します。）")
-    val s = StdIn.readLine
     val in: Either[Int, String] =
       try {
-        val n = s.toInt
+        val n = StdIn.readLine.toInt
         if(n > 0)
           Left(n)
         else
