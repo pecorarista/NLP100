@@ -26,7 +26,7 @@ object Q15 extends App {
       case Left(n) => {
         val ls = Source.fromURL(getClass.getResource("/hightemp.txt")).getLines.toList
         if(n > ls.size) println(TOO_LONG.format(n, ls.size))
-        ls.reverse.take(n).reverse.foreach(println(_))
+        ls.drop(ls.size - n).foreach(println(_))
       }
       case Right(s) => println(s)
     }
