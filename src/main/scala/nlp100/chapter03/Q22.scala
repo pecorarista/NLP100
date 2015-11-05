@@ -7,6 +7,6 @@ object Q22 extends App {
   val pattern = """\[\[Category:([^\|]*)\|?.*\]\]""".r
 
   uk.split("\n")
-    .foreach(l => pattern.findAllIn(l).matchData.foreach(m => println(m.group(1))))
+    .foreach(l => pattern.findAllIn(l).matchData.foreach(m => println(m.group(1).trim)))
 
 }
