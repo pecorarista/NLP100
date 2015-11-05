@@ -36,8 +36,8 @@ object Q16 extends App {
         val ms = Seq.fill(n)(m).zip(rs).map({ case (i, j) => i + j })
 
         ms.zip(ms.scanLeft(0)(_ + _)).foreach({
-          case (i, j) => {
-            ls.drop(j).take(i).foreach(println(_))
+          case (i, acc) => {
+            ls.drop(acc).take(i).foreach(println(_))
             println("====================")
           }
         })

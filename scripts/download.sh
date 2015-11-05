@@ -3,6 +3,11 @@
 NLP100=http://www.cl.ecei.tohoku.ac.jp/nlp100
 RESOURCES=$(git rev-parse --show-toplevel)/src/main/resources
 
+if [ ! -d $RESOURCES ]
+then
+    mkdir $RESOURCES
+fi
+
 for f in hightemp.txt neko.txt jawiki-country.json.gz
 do
     wget --no-clobber $NLP100/data/$f -O $RESOURCES/$f

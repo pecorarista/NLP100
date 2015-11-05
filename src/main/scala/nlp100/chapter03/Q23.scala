@@ -4,10 +4,9 @@ import nlp100.utils.Countries.uk
 
 object Q23 extends App {
 
-  val pattern = """(=+)([^=]*)=+$""".r
+  val pattern = """^(=+)([^=]*)=+$""".r
 
   uk.split("\n")
-    .filter(_.startsWith("="))
     .foreach(
       l =>
         pattern
