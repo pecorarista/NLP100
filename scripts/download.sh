@@ -8,7 +8,7 @@ then
     mkdir $RESOURCES
 fi
 
-for f in hightemp.txt neko.txt jawiki-country.json.gz
+for f in hightemp.txt neko.txt jawiki-country.json.gz artist.json.gz
 do
     wget --no-clobber $NLP100/data/$f -O $RESOURCES/$f
 done
@@ -27,7 +27,10 @@ then
         | cabocha -f 1 -o $RESOURCES/neko.txt.cabocha
 fi
 
-if [ -f $RESOURCES/jawiki-country.json.gz ] && ! [ -f $RESOURCES/jawiki-country.json ]
-then
-    gunzip $RESOURCES/jawiki-country.json.gz
-fi
+for g in jawiki-country.json artist.json
+do
+    if [ -f $RESOURCES/$g".gz" ] && ! [ -f $RESOURCES/$g ]
+    then
+        gunzip $RESOURCES/$g
+    fi
+done

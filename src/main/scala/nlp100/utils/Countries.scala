@@ -1,6 +1,7 @@
 package nlp100.utils
 
-import argonaut._, Argonaut._
+import argonaut._
+import argonaut.Argonaut._
 import scala.io.Source
 
 object Countries {

@@ -15,8 +15,13 @@ object Q29 extends App {
       val src =
         (html \\ "div").map(
           d =>
-            if((d \ "@class").text == "fullMedia") "https:" + (d \ "a" \ "@href").text else ""
-        ).mkString("")
+            if((d \ "@class").text == "fullMedia") {
+              "https:" + (d \ "a" \ "@href").text
+            }
+            else {
+              ""
+            }
+        ).mkString
       println(src)
     }
     case _ => ()
