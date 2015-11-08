@@ -8,6 +8,6 @@ object Ngram {
     else
       Nil
 
-  def bigram[T](s: List[T]) = ngram(2, s)
+  def bigram[T](s: List[T]): List[List[T]] = ngram(2, s)
 
 }

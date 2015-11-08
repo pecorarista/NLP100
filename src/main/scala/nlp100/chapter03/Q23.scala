@@ -6,7 +6,7 @@ object Q23 extends App {
 
   val pattern = """^(=+)([^=]*)=+$""".r
 
-  uk.split("\n")
+  uk.split(System.lineSeparator)
     .foreach(
       l =>
         pattern

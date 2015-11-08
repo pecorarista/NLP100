@@ -7,7 +7,7 @@ object Q04 extends App {
       .zipWithIndex
       .map({
         case (w, i) =>
-          if(Seq(1, 5, 6, 7, 8, 9, 15, 16, 19).contains(i))
+          if(Seq(1, 5, 6, 7, 8, 9, 15, 16, 19).contains(i)) // scalastyle:off magic.number
             (i, w.head)
           else
             (i, w.take(2))

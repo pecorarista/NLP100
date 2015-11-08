@@ -4,6 +4,11 @@ lazy val root = (project in file("."))
     version := "0.0.0",
     scalaVersion := "2.11.7",
     name := "NLP100",
+    scalacOptions ++= Seq(
+      "-Ywarn-unused-import",
+      "-Xlint"
+    ),
+    scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     libraryDependencies ++= Seq(
       "org.scalaz"                 %% "scalaz-core"     % "7.1.4",
       "io.argonaut"                %% "argonaut"        % "6.1",
@@ -15,3 +20,4 @@ lazy val root = (project in file("."))
       "com.typesafe"               %  "config"          % "1.3.0"
     )
   )
+

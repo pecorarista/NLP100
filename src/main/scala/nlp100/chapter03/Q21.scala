@@ -4,6 +4,6 @@ import nlp100.utils.Countries.uk
 
 object Q21 extends App {
 
-  uk.split("\n").filter(_.matches("""\[\[Category:.*\]\]""")).foreach(println(_))
+  uk.split(System.lineSeparator).filter(_.matches("""\[\[Category:.*\]\]""")).foreach(println(_))
 
 }

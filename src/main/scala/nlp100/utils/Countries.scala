@@ -24,7 +24,7 @@ object Countries {
   }
 
   def ukInfo(filter: String => String): Map[String, String] =
-    uk.split("\n")
+    uk.split(System.lineSeparator)
       .dropWhile(_ == "{{基礎情報 国")
       .takeWhile(_ != "}}")
       .flatMap(

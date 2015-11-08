@@ -6,6 +6,6 @@ object Q24 extends App {
 
   val pattern = """ファイル:([^\|]+)""".r
 
-  uk.split("\n")
+  uk.split(System.lineSeparator)
     .foreach(l => pattern.findAllIn(l).matchData.foreach(m => println(m.group(1).trim)))
 }

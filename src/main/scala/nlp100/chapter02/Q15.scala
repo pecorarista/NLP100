@@ -30,7 +30,7 @@ object Q15 extends App {
       }
       case Right(s) => println(s)
     }
-    print("\n")
+    print(System.lineSeparator)
   }
 
 }
