@@ -11,7 +11,6 @@ lazy val root = (project in file("."))
     scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     libraryDependencies ++= Seq(
       "org.scalaz"                 %% "scalaz-core"     % "7.1.4",
-      "io.argonaut"                %% "argonaut"        % "6.1",
       "org.scala-lang.modules"     %% "scala-xml"       % "1.0.3",
       "net.debasishg"              %% "redisclient"     % "3.0",
       "com.typesafe.scala-logging" %% "scala-logging"   % "3.1.0",
