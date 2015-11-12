@@ -1,7 +1,7 @@
 package nlp100.utils
 
 import scala.io.Source
-import play.api.libs.json._
+import play.api.libs.json.Json
 
 object Artists {
 
@@ -22,7 +22,7 @@ object Artists {
     id: Int,
     gid: String,
     name: String,
-    sort_name: Option[String],
+    sort_name: String,
     area: Option[String],
     aliases: Option[Seq[Alias]],
     begin: Option[Date],

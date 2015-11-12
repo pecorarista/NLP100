@@ -8,29 +8,39 @@ then
     mkdir $RESOURCES
 fi
 
-for f in hightemp.txt neko.txt jawiki-country.json.gz artist.json.gz
+for f in hightemp.txt neko.txt
 do
-    wget --no-clobber $NLP100/data/$f -O $RESOURCES/$f
+    if [ ! -f $RESOURCES/$f ]
+    then
+        wget $NLP100/data/$f -O $RESOURCES/$f
+    fi
 done
 
-if [ -f $RESOURCES/neko.txt.mecab ]
+if [ ! -f $RESOURCES/neko.txt.mecab ]
 then
     cat $RESOURCES/neko.txt \
         | sed -e '/^$/d' \
         | mecab -o $RESOURCES/neko.txt.mecab
 fi
 
-if [ -f $RESOURCES/neko.txt.cabocha ]
+if [ ! -f $RESOURCES/neko.txt.cabocha ]
 then
     cat $RESOURCES/neko.txt \
         | sed -e '/^$/d' \
         | cabocha -f 1 -o $RESOURCES/neko.txt.cabocha
 fi
 
-for g in jawiki-country.json artist.json
+for f in jawiki-country.json artist.json
 do
-    if [ -f $RESOURCES/$g".gz" ] && ! [ -f $RESOURCES/$g ]
+    if [ ! -f $RESOURCES/$f".gz" ] && [ ! -f $RESOURCES/$f ]
     then
-        gunzip $RESOURCES/$g
+        wget $NLP100/data/$f -O $RESOURCES/$f
+    fi
+
+    if [ -f $RESOURCES/$f".gz" ] && [ ! -f $RESOURCES/$f ]
+    then
+        gunzip $RESOURCES/$f
     fi
 done
+
+echo "[Ready]"

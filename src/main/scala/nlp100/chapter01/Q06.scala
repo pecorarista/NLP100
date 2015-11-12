@@ -1,6 +1,6 @@
 package nlp100.chapter01
 
-import nlp100.utils.Ngram._
+import nlp100.utils.Ngram.bigram
 
 object Q06 extends App {
 
