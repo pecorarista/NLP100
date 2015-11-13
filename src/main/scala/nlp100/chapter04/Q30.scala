@@ -3,12 +3,9 @@ package nlp100.chapter04
 import scala.collection.mutable.Queue
 import scala.io.Source
 
+import nlp100.utils.Neko.Morph
+
 object Q30 {
-  case class Morph(
-    surface: String,
-    base: String,
-    pos: String,
-    pos1: String)
 
   def morphs(): List[List[Morph]] = {
     var ms = Queue[Morph]()
@@ -25,9 +22,9 @@ object Q30 {
               case Array(surface, description) => {
                 description.split(",") match {
                   case Array(pos, pos1, _, _, _, _, _) =>
-                    Morph(pos, pos1, "", "")
+                    Morph(surface, "*", pos, pos1)
                   case Array(pos, pos1, _, _, _, _, base, _, _) =>
-                    Morph(surface = surface, base = base, pos = pos, pos1 = pos1)
+                    Morph(surface , base, pos, pos1)
                 }
               }
             }
@@ -38,4 +35,5 @@ object Q30 {
     }
     mss.toList
   }
+
 }
