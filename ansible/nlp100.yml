@@ -1,0 +1,61 @@
+# vim:ft=ansible:
+# for Red Hat Enterprise Linux 7
+- hosts: nlp100
+  sudo: yes
+  tasks:
+    - name: Install essential tools
+      yum: name={{ item }}
+      with_items:
+        - wget
+        - git
+        - gcc-c++
+    - name: Install EPEL
+      yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+    - name: Configure YUM
+      synchronize: src=rhnplugin.conf dest=/etc/yum/pluginconf.d/rhnplugin.conf
+    - name: Install PGDG
+      yum: name="http://yum.postgresql.org/9.4/redhat/rhel-6-x86_64/pgdg-redhat94-9.4-2.noarch.rpm"
+    - name: Copy mongodb-org-3.0.repo
+      synchronize: src=mongodb-org-3.0.repo dest=/etc/yum.repos.d/mongodb-org-3.0.repo
+    - name: Copy bintray-sbt-rpm.repo
+      synchronize: src=bintray-sbt-rpm.repo dest=/etc/yum.repos.d/bintray-sbt-rpm.repo
+    - name: Yum Update
+      yum: name=* state=latest
+    - name: Install sbt
+      yum: name=sbt state=latest
+    - name: Install PostgerSQL
+      yum: name={{ item }} state=latest
+      with_items:
+        - postgresql94-devel
+        - postgresql94-server
+    - name: Install MongoDB
+      yum: name=mongodb-org state=latest
+    - name: Install Redis
+      yum: name=redis state=latest
+    - name: Copy the latest JDK
+      synchronize: src={{ jdk_rpm }} dest=/tmp/{{ jdk_rpm }}
+    - name: Configure environment variables
+      synchronize: src=java.sh dest=/etc/profile.d/java.sh
+    - name: Check if MeCab exists
+      shell: PATH=/usr/local/bin:$PATH which mecab
+      ignore_errors: True
+      register: mecab
+      changed_when: False
+    - name: Download MeCab
+      get_url: url="https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE" dest=/tmp/mecab-0.996.tar.gz
+      when: mecab|failed
+    - name: Unpack MeCab
+      command: tar -xzvf /tmp/mecab-0.996.tar.gz -C /tmp
+      when: mecab|failed
+    - name: Configure MeCab
+      command: chdir=/tmp/mecab-0.996 ./configure
+      when: mecab|failed
+    - name: Check the environment for MeCab
+      command: chdir=/tmp/mecab-0.996 make check
+      when: mecab|failed
+    - name: Compile MeCab
+      command: chdir=/tmp/mecab-0.996 make
+      when: mecab|failed
+    - name: Install MeCab
+      command: chdir=/tmp/mecab-0.996 make install
+      when: mecab|failed

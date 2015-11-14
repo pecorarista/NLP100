@@ -3,3 +3,5 @@ target/
 src/main/resources/*
 !src/main/resources/application.conf
 !src/main/resources/logback.xml
+!hosts
+ansible/*.rpm
