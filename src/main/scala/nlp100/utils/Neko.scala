@@ -20,11 +20,21 @@ object Neko {
 
   type Sentence = List[Chunk]
 
-  def morphs(): List[List[Morph]] = {
+  sealed abstract class Tool
+  case object MeCab extends Tool
+  case object CaboCha extends Tool
+
+  def morphs(tool: Tool): List[List[Morph]] = {
+
+    val file = tool match {
+      case MeCab => "/neko.txt.cabocha"
+      case CaboCha => "/neko.txt.cabocha"
+    }
+
     var ms = Queue.empty[Morph]
     var mss = Queue.empty[List[Morph]]
 
-    for(l <- Source.fromURL(getClass.getResource("/neko.txt.cabocha")).getLines) {
+    for(l <- Source.fromURL(getClass.getResource(file)).getLines) {
       if(l.head != '*'){
         if(l == "EOS") {
             mss.enqueue(ms.toList)

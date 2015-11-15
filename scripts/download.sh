@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 NLP100=http://www.cl.ecei.tohoku.ac.jp/nlp100
 RESOURCES=$(git rev-parse --show-toplevel)/src/main/resources
