@@ -34,12 +34,12 @@ for f in jawiki-country.json artist.json
 do
     if [ ! -f $RESOURCES/$f".gz" ] && [ ! -f $RESOURCES/$f ]
     then
-        wget $NLP100/data/$f -O $RESOURCES/$f
+        wget $NLP100/data/$f -O $RESOURCES/$f".gz"
     fi
 
     if [ -f $RESOURCES/$f".gz" ] && [ ! -f $RESOURCES/$f ]
     then
-        gunzip $RESOURCES/$f
+        gunzip $RESOURCES/$f".gz"
     fi
 done
 
