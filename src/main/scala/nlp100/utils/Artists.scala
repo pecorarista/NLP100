@@ -1,7 +1,8 @@
 package nlp100.utils
 
 import scala.io.Source
-import play.api.libs.json.Json
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 import reactivemongo.bson.Macros
 
 object Artists {
@@ -42,13 +43,25 @@ object Artists {
     tags: Option[Seq[Tag]],
     rating: Option[Seq[Rating]]
   )
-  object Artist {
-    implicit val artistFormat = Json.format[Artist]
-    implicit val artistHandler = Macros.handler[Artist]
-  }
+
+  implicit val artistReads = (
+    (__ \ "id").read[Int] ~
+    (__ \ "gid").read[String] ~
+    (__ \ "name").read[String] ~
+    (__ \ "sort_name").read[String] ~
+    (__ \ "area").readNullable[String] ~
+    (__ \ "aliases").readNullable[Seq[Alias]] ~
+    (__ \ "begin").readNullable[Date] ~
+    (__ \ "end").readNullable[Date] ~
+    (__ \ "tags").readNullable[Seq[Tag]] ~
+    (__ \ "rating").readNullable[Seq[Rating]] // TODO: "rating" can be a singleton!
+  )(Artist)
+
+  implicit val artistWrites = Json.writes[Artist]
+  implicit val artistHandler = Macros.handler[Artist]
 
   def artists(): Iterator[Artist] =
-    Source.fromURL(getClass.getResource("/artist.jsonl"))
+    Source.fromURL(getClass.getResource("/artist.json"))
       .getLines
       .map(Json.parse(_).asOpt[Artist])
       .flatMap(a => a)
