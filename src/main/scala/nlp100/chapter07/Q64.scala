@@ -1,11 +1,13 @@
 package nlp100.chapter07
 
-import scala.util.{Failure, Success}
-import reactivemongo.api.MongoDriver
-import scala.concurrent.ExecutionContext.Implicits.global
 import com.typesafe.config.ConfigFactory
+import reactivemongo.api.MongoDriver
+import scala.util.{Failure, Success}
+import scala.concurrent.{Future, Await}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 import reactivemongo.bson.BSONDocument
-import play.api.libs.json.Json
+import reactivemongo.api.commands.WriteResult
 import nlp100.utils.Artists.artists
 
 object Q64 extends App {
@@ -15,18 +17,10 @@ object Q64 extends App {
   val database = connection(ConfigFactory.load.getString("mongodb.database"))
   val collection = database.collection("artists")
 
-  val documents = artists.toSeq.map(implicitly[collection.ImplicitlyDocumentProducer](_))
-
-  collection.remove(BSONDocument.empty).onComplete {
-    case Failure(e) => throw e
-    case Success(_) => {
-      println("Inserting...")
-      collection.bulkInsert(ordered = true)(documents: _*).onComplete {
-        case Failure(e) => throw e
-        case Success(result) =>
-          println(s"""Successfully ${result.n} documents have been inserted into collection "${collection.name}".""")
-      }
-    }
-  }
+  Await.result(collection.remove(BSONDocument.empty), Duration.Inf)
+  println("Inserting...")
+  val f = Future.sequence(artists.map(artist => collection.insert(artist)))
+  val rs = Await.result(f, Duration.Inf)
+  println(s"""Successfully ${rs.length} documents have been inserted.""")
 
 }
