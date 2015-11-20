@@ -6,7 +6,8 @@ lazy val root = (project in file("."))
     name := "NLP100",
     scalacOptions ++= Seq(
       "-Ywarn-unused-import",
-      "-Xlint"
+      "-Xlint",
+      "-deprecation"
     ),
     scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import")),
     libraryDependencies ++= Seq(

@@ -2,13 +2,17 @@ package nlp100.chapter07
 
 import com.typesafe.config.ConfigFactory
 import reactivemongo.api.MongoDriver
+import scala.io.Source
 import scala.util.{Failure, Success}
 import scala.concurrent.{Future, Await}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import reactivemongo.bson.BSONDocument
 import reactivemongo.api.commands.WriteResult
-import nlp100.utils.Artists.artists
+import reactivemongo.api.indexes._
+import reactivemongo.api.indexes.IndexType.{ Text }
+import reactivemongo.core.commands.Count
+import reactivemongo.bson.BSONDocument
+import nlp100.utils.Artists._
 
 object Q64 extends App {
 
@@ -21,6 +25,17 @@ object Q64 extends App {
   println("Inserting...")
   val f = Future.sequence(artists.map(artist => collection.insert(artist)))
   val rs = Await.result(f, Duration.Inf)
-  println(s"""Successfully ${rs.length} documents have been inserted.""")
+  println(s"""In total ${rs.length} documents have been inserted.""")
+
+  val indexName = "nlp100.chapter07.Q64"
+  collection.indexesManager.ensure(
+    Index(
+      key = Seq("name" -> Text, "aliases.name" -> Text, "tags.value" -> Text, "rating.value" -> Text),
+      name = Some(indexName)
+    )
+  ) onComplete {
+      case Failure(e) => throw e
+      case Success(b) => println(if(b) s"""Index "$indexName" was created.""" else s"""Index "$indexName" already exists.""")
+  }
 
 }
