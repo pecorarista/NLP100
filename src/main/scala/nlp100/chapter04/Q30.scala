@@ -6,7 +6,7 @@ import nlp100.utils.Neko.MeCab
 
 object Q30 {
 
-  def morphs(): List[List[Morph]] = {
+  def morphs(): Seq[Seq[Morph]] = {
     Neko.morphs(MeCab)
   }
 

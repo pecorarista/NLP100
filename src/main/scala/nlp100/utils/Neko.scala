@@ -5,26 +5,17 @@ import scala.collection.mutable.Map
 import scala.io.Source
 
 object Neko {
-  case class Morph(
-    surface: String,
-    base: String,
-    pos: String,
-    pos1: String
-  )
+  case class Morph(surface: String, base: String, pos: String, pos1: String)
 
-  case class Chunk(
-    morphs: List[Morph],
-    dst: Int,
-    srcs: List[Int]
-  )
+  case class Chunk(morphs: Seq[Morph], dst: Int, srcs: Seq[Int])
 
-  type Sentence = List[Chunk]
+  type Sentence = Seq[Chunk]
 
   sealed abstract class Tool
   case object MeCab extends Tool
   case object CaboCha extends Tool
 
-  def morphs(tool: Tool): List[List[Morph]] = {
+  def morphs(tool: Tool): Seq[Seq[Morph]] = {
 
     val file = tool match {
       case MeCab => "/neko.txt.cabocha"
@@ -32,12 +23,12 @@ object Neko {
     }
 
     var ms = Queue.empty[Morph]
-    var mss = Queue.empty[List[Morph]]
+    var mss = Queue.empty[Seq[Morph]]
 
     for(l <- Source.fromURL(getClass.getResource(file)).getLines) {
       if(l.head != '*'){
         if(l == "EOS") {
-            mss.enqueue(ms.toList)
+            mss.enqueue(ms.toSeq)
             ms = Queue.empty[Morph]
         }
         else {
@@ -55,10 +46,10 @@ object Neko {
         }
       }
     }
-    mss.toList
+    mss.toSeq
   }
 
-  def dependencies(): List[Sentence] = {
+  def dependencies(): Seq[Sentence] = {
     var deps = Map.empty[Int, Int]
     var ms = Queue.empty[Morph]
     var mss = Queue.empty[Queue[Morph]]
@@ -79,9 +70,9 @@ object Neko {
         mss.enqueue(ms)
         val s = mss.zipWithIndex.map({
           case (ms, i) => {
-            Chunk(ms.toList, deps(i), deps.filter({ case (_, v) => v == i }).keys.toList)
+            Chunk(ms.toSeq, deps(i), deps.filter({ case (_, v) => v == i }).keys.toSeq)
           }
-        }).toList
+        }).toSeq
         ss.enqueue(s)
         deps = Map.empty[Int, Int]
         ms = Queue.empty[Morph]
@@ -101,7 +92,7 @@ object Neko {
         ms.enqueue(m)
       }
     }
-    ss.toList
+    ss.toSeq
   }
 
 }
