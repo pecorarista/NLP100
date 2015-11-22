@@ -4,7 +4,7 @@ import com.redis._
 import play.api.libs.json.Json
 import scala.io.StdIn
 import scala.Console
-import com.typesafe.config._
+import com.typesafe.config.ConfigFactory
 
 
 object Q61 extends App {
