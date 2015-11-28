@@ -3,7 +3,7 @@ package nlp100.chapter01
 object Q04 extends App {
   val m =
     "Hi He Lied Because Boron Could Not Oxidize Fluorine. New Nations Might Also Sign Peace Security Clause. Arthur King Can."
-      .split(" ")
+      .split(' ')
       .zipWithIndex
       .map({
         case (w, i) =>

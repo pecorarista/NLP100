@@ -6,7 +6,7 @@ object Q19 extends App {
 
   Source.fromURL(getClass.getResource("/hightemp.txt"))
     .getLines
-    .map(l => l.split("\t") match { case Array(col1, _, _, _) => col1 })
+    .map(l => l.split('\t') match { case Array(col1, _, _, _) => col1 })
     .toList
     .groupBy(_.toString)
     .map(t => (t._1, t._2.length))

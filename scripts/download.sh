@@ -1,6 +1,6 @@
 #!/bin/bash
 
-NLP100=http://www.cl.ecei.tohoku.ac.jp/nlp100
+NLP100=http://www.cl.ecei.tohoku.ac.jp/nlp100/data
 RESOURCES=$(git rev-parse --show-toplevel)/src/main/resources
 
 if [ ! -d $RESOURCES ]
@@ -8,11 +8,11 @@ then
     mkdir $RESOURCES
 fi
 
-for f in hightemp.txt neko.txt
+for f in hightemp.txt neko.txt nlp.txt
 do
     if [ ! -f $RESOURCES/$f ]
     then
-        wget $NLP100/data/$f -O $RESOURCES/$f
+        wget $NLP100/$f -O $RESOURCES/$f
     fi
 done
 
@@ -34,7 +34,7 @@ for f in jawiki-country.json artist.json
 do
     if [ ! -f $RESOURCES/$f".gz" ] && [ ! -f $RESOURCES/$f ]
     then
-        wget $NLP100/data/$f".gz" -O $RESOURCES/$f".gz"
+        wget $NLP100/$f".gz" -O $RESOURCES/$f".gz"
     fi
 
     if [ -f $RESOURCES/$f".gz" ] && [ ! -f $RESOURCES/$f ]

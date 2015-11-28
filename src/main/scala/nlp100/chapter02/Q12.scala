@@ -10,7 +10,7 @@ object Q12 extends App {
 
   Source.fromURL(getClass.getResource("/hightemp.txt")).getLines.foreach(
     l =>
-      l.split("\t") match {
+      l.split('\t') match {
         case Array(col1, col2, _, _) => {
           p1.println(col1)
           p2.println(col2)

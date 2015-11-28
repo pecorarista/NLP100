@@ -1,9 +1,9 @@
 package nlp100.chapter07
 
 import com.redis._
+import com.typesafe.config.ConfigFactory
 import play.api.libs.json.Json
 import scala.io.Source
-import com.typesafe.config.ConfigFactory
 
 object Q60 {
 

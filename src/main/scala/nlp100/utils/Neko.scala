@@ -32,9 +32,9 @@ object Neko {
             ms = Queue.empty[Morph]
         }
         else {
-          val m = l.split("\t") match {
+          val m = l.split('\t') match {
             case Array(surface, description) => {
-              description.split(",") match {
+              description.split(',') match {
                 case Array(pos, pos1, _, _, _, _, _) =>
                   Morph(surface, "*", pos, pos1)
                 case Array(pos, pos1, _, _, _, _, base, _, _) =>
@@ -57,7 +57,7 @@ object Neko {
 
     for(l <- Source.fromURL(getClass.getResource("/neko.txt.cabocha")).getLines) {
       if(l.head == '*') {
-        val (src, dst) = l.split(" ") match {
+        val (src, dst) = l.split(' ') match {
           case Array(_, i, j, _, _) => (i.toInt, j.dropRight(1).toInt)
         }
         deps += src -> dst
@@ -79,9 +79,9 @@ object Neko {
         mss = Queue.empty[Queue[Morph]]
       }
       else {
-        val m = l.split("\t") match {
+        val m = l.split('\t') match {
           case Array(surface, description) => {
-            description.split(",") match {
+            description.split(',') match {
               case Array(pos, pos1, _, _, _, _, _) =>
                 Morph(surface, "*", pos, pos1)
               case Array(pos, pos1, _, _, _, _, base, _, _) =>
