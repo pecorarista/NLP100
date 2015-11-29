@@ -40,7 +40,7 @@ object Artists {
     begin: Option[Date],
     end: Option[Date],
     tags: Option[Seq[Tag]],
-    rating: Option[Seq[Rating]]
+    rating: Option[Rating]
   )
   object Artist {
     implicit val artistWrites = Json.writes[Artist]
@@ -69,7 +69,7 @@ object Artists {
           val begin = (j \ "begin").asOpt[Date]
           val end = (j \ "end").asOpt[Date]
           val tags = sequence[Tag](j, "tags")
-          val rating = sequence[Rating](j, "rating")
+          val rating = (j \ "rating").asOpt[Rating]
           Artist(id, gid, name, sort_name, area, aliases, begin, end, tags, rating)
         }
       )
