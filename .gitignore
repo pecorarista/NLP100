@@ -5,4 +5,3 @@ src/main/resources/*
 !src/main/resources/logback.xml
 !hosts
 ansible/*.rpm
-Q69/
