@@ -1,8 +1,9 @@
 Q69
 ===
 
-```
-sbt run
-```
+__THIS DOES NOT WORK NOW__.
 
-Open `localhost:9000` on your favorite browser.
+This application is written based on [playing-reactive-mongo](https://github.com/knoldus/playing-reactive-mongo).
+
+To launch the application, type `sbt run` in the directory `Q69`.
+Then you can access `localhost:9000` on your favorite browser.
