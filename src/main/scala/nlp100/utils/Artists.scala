@@ -12,7 +12,7 @@ object Artists {
     implicit val aliasHandler = Macros.handler[Alias]
   }
 
-  case class Date(year: Int, month: Int, date: Int)
+  case class Date(year: Option[Int], month: Option[Int], date: Option[Int])
   object Date {
     implicit val dateFormat = Json.format[Date]
     implicit val dateHandler = Macros.handler[Date]

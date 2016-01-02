@@ -1,0 +1,66 @@
+---
+# vim:ft=ansible:
+- hosts: nlp100
+  vars:
+    - ansible_python_interpreter: /usr/bin/python2
+    - jdk_url: "http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jdk-8u65-linux-x64.tar.gz"
+  tasks:
+    - name: Check if java is installed
+      shell: ~/jvm/bin/java -version
+      register: java
+      environment:
+        PATH: "~/jvm/default/bin:{{ ansible_env.PATH }}"
+      ignore_errors: True
+      changed_when: False
+    - name: Install essential tools
+      yum:
+        name: wget
+        state: latest
+      sudo: yes
+      when: (ansible_os_family == "Debian") and java|failed
+    - name: Create a directory "~/jvm"
+      file:
+        path: ~/jvm
+        state: directory
+      when: java|failed
+    - name: Create a directory "~/Downloads"
+      file:
+        path: ~/Downloads
+        state: directory
+      when: java|failed
+    - name: Check if JDK has been downloaded
+      stat:
+        path: "~/Downloads/{{ jdk_url | basename }}"
+      register: jdk
+    - name: Download JDK
+      shell: |
+        wget --quiet --no-check-certificate --no-cookies \
+        --header 'Cookie: oraclelicense=accept-securebackup-cookie' "{{ jdk_url }}"
+      args:
+        chdir: ~/Downloads
+      when: java|failed and (jdk.stat.exists == False or jdk.stat.md5 != "196880a42c45ec9ab2f00868d69619c0")
+    - name: Extract JDK
+      unarchive:
+        src: "~/Downloads/{{ jdk_url | basename }}"
+        dest: ~/jvm/
+        copy: no
+      when: java|failed
+    - name: Create a symbolic link to jdk
+      command: |
+        ln -sf \
+        "~/jvm/{{ jdk_url | basename | replace('jdk-', 'jdk1.') | replace('-linux-x64.tar.gz', '') | replace('u', '.0_') }}" \
+        ~/jvm/default
+      when: java|failed
+    - name: Add JAVA_HOME in "~/.bash_profile"
+      lineinfile:
+        dest: ~/.profile
+        state: present
+        line: "export JAVA_HOME=$HOME/jvm/default"
+      when: java|failed
+    - name: Edit PATH in "~/.bash_profile"
+      lineinfile:
+        dest: ~/.profile
+        state: present
+        line: "export PATH=$JAVA_HOME/bin:$PATH"
+      when: java|failed
+...
