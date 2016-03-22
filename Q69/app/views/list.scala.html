@@ -49,7 +49,7 @@
               <td>
                 @Html(artist.tags match {
                   case Some(tags) => tags.map(
-                    tag => s"""<i class="fa fa-tag"></i> ${tag.value} (${tag.count})""").mkString(" ")
+                    tag => s"""<button class="btn btn-sm"><i class="fa fa-tag"></i> ${tag.value} (${tag.count})</button>""").mkString(" ")
                   case None => ""
                 })
               </td>

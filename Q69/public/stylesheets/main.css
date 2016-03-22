@@ -63,3 +63,12 @@ div.query legend {
 table.table {
   table-layout: fixed;
 }
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}
+
+td > button {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
