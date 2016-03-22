@@ -5,3 +5,6 @@ written in Scala.
 ```
 sbt "run-main nlp100.chapter##.Q##"
 ```
+
+The directory `Q69` contains a web application to list `artist.json`.
+<img src="./screenshots/webapp.png"/>

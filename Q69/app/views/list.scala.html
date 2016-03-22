@@ -4,24 +4,24 @@
     if(orderBy == scala.math.abs(currentOrderBy)) -currentOrderBy else orderBy
   }.getOrElse(currentOrderBy), nameFilter, aliasFilter, tagFilter)
 }
-@header(orderBy: Int, title: String) = {
-  <th class="col@orderBy header @if(scala.math.abs(currentOrderBy) == orderBy) @{if(currentOrderBy < 0) "glyphicon glyphicon-chevron-down" else "glyphicon glyphicon-chevron-up"}">
+@header(orderBy: Int, title: String, width: Int) = {
+<th class="col@orderBy header @if(scala.math.abs(currentOrderBy) == orderBy) @{if(currentOrderBy < 0) "glyphicon glyphicon-chevron-down" else "glyphicon glyphicon-chevron-up"}" style="text-align: center; width: @{width}%;">
     <a href="@link(0, Some(orderBy))">@title</a>
   </th>
 }
 @main("playing-reactive-mongo") {
   <div class="container">
-    <div id="actions">
+    <div id="actions" class="query">
       @helper.form(action=routes.Application.list(), 'class -> "navbar-form navbar-left", 'role -> "search") {
         <fieldset>
-          <legend>検索条件</legend>
+          <legend>Query</legend>
           <label for="name">Name: </label>
           <input type="search" id="name" name="n" value="@nameFilter"><br/>
           <label for="alias">Alias: </label>
           <input type="search" id="alias" name="a" value="@aliasFilter"><br/>
           <label for="tag">Tag: </label>
           <input type="search" id="tag" name="t" value="@tagFilter"><br/>
-          <input type="submit" id="searchsubmit" value="Filter by name" class="btn btn-primary btn-sm">
+          <input type="submit" id="searchsubmit" value="Search" class="btn btn-primary btn-sm">
         </fieldset>
       }
     </div>
@@ -29,10 +29,10 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            @header(2, "Artist Name")
-            @header(3, "Alias")
-            @header(4, "Tags")
-            @header(5, "Rating")
+            @header(2, "Artist Name", 30)
+            @header(3, "Alias", 25)
+            @header(4, "Tags", 25)
+            @header(5, "Rating", 20)
           </tr>
         </thead>
         <tbody>
@@ -49,7 +49,7 @@
               <td>
                 @Html(artist.tags match {
                   case Some(tags) => tags.map(
-                  tag => s"""<i class="fa fa-tag"> ${tag.value} (${tag.count})</i>""").mkString
+                    tag => s"""<i class="fa fa-tag"></i> ${tag.value} (${tag.count})""").mkString(" ")
                   case None => ""
                 })
               </td>

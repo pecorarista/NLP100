@@ -52,14 +52,20 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
     }
 
     val pageSize = 20
-    val total = 100.toLong
+    val total = 300.toLong
     val offset = page * pageSize
+
+    val j = Json.obj(
+      "name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"),
+      "aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))),
+      "tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"))))
+    )
 
     val futurePage =
       if(nameFilter.length > 0)
-        collection.find(Json.obj("name" -> nameFilter)).cursor[Artist]().collect[List]()
+        collection.find(j).cursor[Artist]().collect[List](pageSize)
       else
-        collection.find(Json.obj()).sort(Json.obj("sort_name" -> signum(orderBy))).options(QueryOpts().skip(offset)).cursor[Artist]().collect[List](pageSize)
+        collection.genericQueryBuilder.cursor[Artist]().collect[List](pageSize)
 
     futurePage.map({ artists =>
       implicit val msg = messagesApi.preferred(request)

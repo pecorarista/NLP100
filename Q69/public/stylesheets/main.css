@@ -1,0 +1,65 @@
+@import url(http://fonts.googleapis.com/css?family=Noto+Sans&subset=cyrillic,cyrillic-ext,latin,greek-ext,greek,latin-ext);
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+body {
+  color: black;
+  font-size: 16px;
+  font-family: 'Noto Sans', 'Noto Sans Japanese', sans-serif;
+}
+
+.navbar-brand {
+  font-size: 22px;
+  font-weight: bolder;
+}
+
+body > .container {
+  padding: 40px 15px 0;
+}
+
+.container .text-muted {
+  margin: 15px 0;
+}
+
+code {
+  font-size: 80%;
+}
+
+.topRight {
+  position: absolute;
+  right: 20px;
+  top: 70px;
+}
+
+div.query {
+  width: 460px;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 240px;
+}
+
+div.query label {
+  width: 150px;
+  margin-left: 10px;
+}
+
+div.query input[type=search] {
+  width: 222px;
+  margin-bottom: 10px;
+  height: 32px;
+}
+
+div.query input[type=submit] {
+  float: right;
+  margin-right: 2px;
+}
+
+div.query legend {
+  color: #dd4814;
+  text-align: center;
+  font-weight: bold;
+  padding-bottom: 9px;
+}
+
+table.table {
+  table-layout: fixed;
+}

@@ -1,7 +1,7 @@
 Q69
 ===
 
-__THIS DOES NOT WORK NOW__.
+THES DOES NOT WORK YET.
 
 This application is written based on [playing-reactive-mongo](https://github.com/knoldus/playing-reactive-mongo).
 
