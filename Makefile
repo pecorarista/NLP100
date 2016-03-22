@@ -1,5 +1,3 @@
-#!/bin/bash
-
 NLP100 := http://www.cl.ecei.tohoku.ac.jp/nlp100/data
 RESOURCES := src/main/resources
 
