@@ -2,7 +2,7 @@ package controllers
 
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
-import models.{ Artist, Rating, Page }
+import models.{ Artist, Page }
 import play.api.Logger
 import play.api.i18n.MessagesApi
 import play.api.mvc.{ Action, Controller }
@@ -18,7 +18,7 @@ import reactivemongo.bson.BSONDocument
 import reactivemongo.api.QueryOpts
 import scala.concurrent.{Future, Await}
 import scala.concurrent.duration.DurationInt
-import scala.math.{ abs, signum }
+import scala.math.signum
 import scala.util.{ Failure, Success }
 import views.html
 
