@@ -46,30 +46,29 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
     val pageSize = 20
     val offset = page * pageSize
 
-    var j = Json.obj()
+    var match_query = Json.obj()
     if(nameFilter.length > 0)
-      j = j + ("name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"))
+      match_query = match_query + ("name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"))
     if(aliasFilter.length > 0)
-      j = j + ("aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))))
+      match_query = match_query + ("aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))))
     if(tagFilter.length > 0)
-      j = j + ("tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"), "$options" -> "i"))))
+      match_query = match_query + ("tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"), "$options" -> "i"))))
 
-    val sort = orderBy match {
-      case 1 => ((x: Artist, y: Artist) => x.sort_name < y.sort_name)
-      case -1 => ((x: Artist, y: Artist) => x.sort_name > y.sort_name)
-      case 2 => ((x: Artist, y: Artist) => x.rating < y.rating)
-      case _ => ((x: Artist, y: Artist) => x.rating > y.rating)
+    val sort_query = orderBy match {
+      case 1|(-1) => Json.obj("name" -> signum(orderBy))
+      case _ => Json.obj("rating.value" -> signum(orderBy))
     }
 
-    val futurePage: Future[List[Artist]] = collection.find(j)
+    val futurePage: Future[List[Artist]] = collection.find(match_query)
       .options(QueryOpts(skipN = page * pageSize))
+      .sort(sort_query)
       .cursor[Artist]()
       .collect[List](pageSize)
-    val total = Await.result(collection.count(Some(j)), 30.seconds)
+    val total = Await.result(collection.count(Some(match_query)), 30.seconds)
 
     futurePage.map({ artists =>
       implicit val msg = messagesApi.preferred(request)
-      Ok(html.list(Page(artists.sortWith((x, y) => sort(x, y)), page, offset, total), orderBy, nameFilter, aliasFilter, tagFilter))
+      Ok(html.list(Page(artists, page, offset, total), orderBy, nameFilter, aliasFilter, tagFilter))
     }).recover {
       case t: TimeoutException => {
         Logger.error("Problem found in artist list process")

@@ -1,2 +1,2 @@
 #!/bin/bash
-mongoimport --db test --collection artists --file artist.json
+mongoimport --db nlp100 --collection artists --file artist.json
