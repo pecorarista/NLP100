@@ -51,6 +51,7 @@ div.query input[type=search] {
 div.query input[type=submit] {
   float: right;
   margin-right: 2px;
+  font-weight: bold;
 }
 
 div.query legend {
@@ -71,4 +72,13 @@ table.table {
 td > button {
   margin-top: 3px;
   margin-bottom: 3px;
+}
+
+td > button > a {
+  color: black;
+}
+
+td > button > a:hover {
+  color: white;
+  text-decoration: none;
 }

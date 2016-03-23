@@ -52,20 +52,24 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
     }
 
     val pageSize = 20
-    val total = 300.toLong
+    val total = 2.toLong
     val offset = page * pageSize
 
-    val j = Json.obj(
-      "name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"),
-      "aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))),
-      "tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"))))
-    )
+    var j = Json.obj()
+    if(nameFilter.length > 0)
+      j = j + ("name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"))
+    else
+      ()
+    if(aliasFilter.length > 0)
+      j = j + ("aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))))
+    else
+      ()
+    if(tagFilter.length > 0)
+      j = j + ("tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"), "$options" -> "i"))))
+    else
+      ()
 
-    val futurePage =
-      if(nameFilter.length > 0)
-        collection.find(j).cursor[Artist]().collect[List](pageSize)
-      else
-        collection.genericQueryBuilder.cursor[Artist]().collect[List](pageSize)
+    val futurePage = collection.find(j).cursor[Artist]().collect[List](pageSize)
 
     futurePage.map({ artists =>
       implicit val msg = messagesApi.preferred(request)

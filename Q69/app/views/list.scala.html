@@ -9,7 +9,7 @@
     <a href="@link(0, Some(orderBy))">@title</a>
   </th>
 }
-@main("playing-reactive-mongo") {
+@main("言語処理100本ノック") {
   <div class="container">
     <div id="actions" class="query">
       @helper.form(action=routes.Application.list(), 'class -> "navbar-form navbar-left", 'role -> "search") {
@@ -49,7 +49,7 @@
               <td>
                 @Html(artist.tags match {
                   case Some(tags) => tags.map(
-                    tag => s"""<button class="btn btn-sm"><i class="fa fa-tag"></i> ${tag.value} (${tag.count})</button>""").mkString(" ")
+                  tag => s"""<button class="btn btn-sm"><a href="/artists?t=${tag.value}"><i class="fa fa-tag"></i> ${tag.value} (${tag.count})</a></button>""").mkString(" ")
                   case None => ""
                 })
               </td>
