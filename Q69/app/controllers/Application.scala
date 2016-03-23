@@ -49,16 +49,10 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
     var j = Json.obj()
     if(nameFilter.length > 0)
       j = j + ("name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"))
-    else
-      ()
     if(aliasFilter.length > 0)
       j = j + ("aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))))
-    else
-      ()
     if(tagFilter.length > 0)
       j = j + ("tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"), "$options" -> "i"))))
-    else
-      ()
 
     val sort = orderBy match {
       case 1 => ((x: Artist, y: Artist) => x.sort_name < y.sort_name)
