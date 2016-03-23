@@ -1,9 +1,9 @@
 Q69
 ===
 
-THES DOES NOT WORK YET.
-
 This application is written based on [playing-reactive-mongo](https://github.com/knoldus/playing-reactive-mongo).
 
-To launch the application, type `sbt run` in the directory `Q69`.
-Then you can access `localhost:9000` on your favorite browser.
+1. Import `artist.json` to MongoDB by running `scripts/import.sh`.
+2. Launch the server. Type `sbt "run <port_number>"`.
+3. Open `localhost:<port_number>` by your favorite browser.
+

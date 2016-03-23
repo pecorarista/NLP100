@@ -5,9 +5,13 @@
   }.getOrElse(currentOrderBy), nameFilter, aliasFilter, tagFilter)
 }
 @header(orderBy: Int, title: String, width: Int) = {
-<th class="col@orderBy header @if(scala.math.abs(currentOrderBy) == orderBy) @{if(currentOrderBy < 0) "glyphicon glyphicon-chevron-down" else "glyphicon glyphicon-chevron-up"}" style="text-align: center; width: @{width}%;">
-    <a href="@link(0, Some(orderBy))">@title</a>
-  </th>
+<th style="width: @{width}%;">
+  <a href="@link(0, Some(orderBy))">
+    @title
+    <i class="fa @if(scala.math.abs(currentOrderBy) == orderBy) @{if(currentOrderBy < 0) "fa-sort-desc" else "fa-sort-asc"}">
+    </i>
+  </a>
+</th>
 }
 @main("言語処理100本ノック") {
   <div class="container">
@@ -29,10 +33,10 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            @header(2, "Artist Name", 30)
-            @header(3, "Alias", 25)
-            @header(4, "Tags", 25)
-            @header(5, "Rating", 20)
+            @header(1, "Artist Name", 30)
+            <th style="width: 25%;">Alias</th>
+            <th style="width: 25%;">Tags</th>
+            @header(2, "Rating", 20)
           </tr>
         </thead>
         <tbody>

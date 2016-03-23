@@ -69,6 +69,10 @@ table.table {
   vertical-align: middle;
 }
 
+.table > thead > tr > th {
+  text-align: center;
+}
+
 td > button {
   margin-top: 3px;
   margin-bottom: 3px;

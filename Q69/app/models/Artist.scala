@@ -4,7 +4,7 @@ import play.api.libs.json.Json
 import play.modules.reactivemongo.json.BSONFormats._
 import reactivemongo.bson.BSONObjectID
 
-case class Page[A](items: Seq[A], page: Int, offset: Long, total: Long) {
+case class Page[A](items: Seq[A], page: Int, offset: Int, total: Int) {
   lazy val prev = Option(page - 1).filter(_ >= 0)
   lazy val next = Option(page + 1).filter(_ => (offset + items.size) < total)
 }
@@ -18,7 +18,10 @@ object Date { implicit val dateFormat = Json.format[Date] }
 case class Tag(count: Int, value: String)
 object Tag { implicit val tagFormat = Json.format[Tag] }
 
-case class Rating(count: Int, value: Int)
+case class Rating(count: Int, value: Int) extends Ordered[Rating] {
+  import scala.math.Ordered.orderingToOrdered
+  def compare(that: Rating): Int = (this.value, this.count) compare (that.value, that.count)
+}
 object Rating { implicit val ratingFormat = Json.format[Rating] }
 
 case class Artist(_id: BSONObjectID, id: Int, gid: String, name: String, sort_name: String, area: Option[String], aliases: Option[Seq[Alias]], begin: Option[Date], end: Option[Date], tags: Option[Seq[Tag]], rating: Option[Rating])

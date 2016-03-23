@@ -1,4 +1,4 @@
 GET /              controllers.Application.index
-GET /artists       controllers.Application.list(p: Int ?= 0, s: Int ?= 1, n ?= "", a ?= "", t ?= "")
+GET /artists       controllers.Application.list(p: Int ?= 0, s: Int ?= -2, n ?= "", a ?= "", t ?= "")
 GET /assets/*file  controllers.Assets.at(path="/public", file)
 GET /webjars/*file controllers.WebJarAssets.at(file)
