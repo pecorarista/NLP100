@@ -62,10 +62,10 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
       case _ => Json.obj("rating.value" -> signum(orderBy))
     }
 
-    val total = collection.flatMap(_.count(Some(matchQuery)))
-    val filtered = collection.flatMap(_.find(matchQuery).options(QueryOpts(skipN = page * pageSize)).sort(sortQuery).cursor[Artist]().collect[List](pageSize))
+    val futureTotal = collection.flatMap(_.count(Some(matchQuery)))
+    val futureArtists = collection.flatMap(_.find(matchQuery).options(QueryOpts(skipN = page * pageSize)).sort(sortQuery).cursor[Artist]().collect[List](pageSize))
 
-    total.zip(filtered).map({
+    futureTotal.zip(futureArtists).map({
       case (total, artists) => {
         implicit val msg = messagesApi.preferred(request)
         Ok(html.list(Page(artists, page, offset, total), orderBy, nameFilter, aliasFilter, tagFilter))
