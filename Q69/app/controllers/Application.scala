@@ -1,5 +1,6 @@
 package controllers
 
+import com.typesafe.config.ConfigFactory
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 import models.{ Artist, Page }
@@ -12,11 +13,12 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.modules.reactivemongo.{
   MongoController, ReactiveMongoApi, ReactiveMongoComponents
 }
-import play.modules.reactivemongo.json._
-import play.modules.reactivemongo.json.collection.JSONCollection
+
+import reactivemongo.play.json._
+import reactivemongo.play.json.collection.JSONCollection
 import reactivemongo.bson.BSONDocument
 import reactivemongo.api.QueryOpts
-import scala.concurrent.{Future, Await}
+import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.math.signum
 import scala.util.{ Failure, Success }
@@ -26,7 +28,8 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
 
   implicit val timeout = 10.seconds
 
-  lazy val collection: JSONCollection = db.collection[JSONCollection]("artists")
+  val config = ConfigFactory.load()
+  def collection: Future[JSONCollection] = connection.database(config.getString("db.name")).map(_.collection[JSONCollection]("artists"))
 
   import models._
 
@@ -46,29 +49,27 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
     val pageSize = 20
     val offset = page * pageSize
 
-    var match_query = Json.obj()
+    var matchQuery = Json.obj()
     if(nameFilter.length > 0)
-      match_query = match_query + ("name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"))
+      matchQuery = matchQuery + ("name" -> Json.obj("$regex" -> (".*" + nameFilter + ".*"), "$options" -> "i"))
     if(aliasFilter.length > 0)
-      match_query = match_query + ("aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))))
+      matchQuery = matchQuery + ("aliases" -> Json.obj("$elemMatch" -> Json.obj("name" -> Json.obj("$regex" -> (".*" + aliasFilter + ".*"), "$options" -> "i"))))
     if(tagFilter.length > 0)
-      match_query = match_query + ("tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"), "$options" -> "i"))))
+      matchQuery = matchQuery + ("tags" -> Json.obj("$elemMatch" -> Json.obj("value" -> Json.obj("$regex" -> (".*" + tagFilter + ".*"), "$options" -> "i"))))
 
-    val sort_query = orderBy match {
+    val sortQuery = orderBy match {
       case 1|(-1) => Json.obj("name" -> signum(orderBy))
       case _ => Json.obj("rating.value" -> signum(orderBy))
     }
 
-    val futurePage: Future[List[Artist]] = collection.find(match_query)
-      .options(QueryOpts(skipN = page * pageSize))
-      .sort(sort_query)
-      .cursor[Artist]()
-      .collect[List](pageSize)
-    val total = Await.result(collection.count(Some(match_query)), 30.seconds)
+    val total = collection.flatMap(_.count(Some(matchQuery)))
+    val filtered = collection.flatMap(_.find(matchQuery).options(QueryOpts(skipN = page * pageSize)).sort(sortQuery).cursor[Artist]().collect[List](pageSize))
 
-    futurePage.map({ artists =>
-      implicit val msg = messagesApi.preferred(request)
-      Ok(html.list(Page(artists, page, offset, total), orderBy, nameFilter, aliasFilter, tagFilter))
+    total.zip(filtered).map({
+      case (total, artists) => {
+        implicit val msg = messagesApi.preferred(request)
+        Ok(html.list(Page(artists, page, offset, total), orderBy, nameFilter, aliasFilter, tagFilter))
+      }
     }).recover {
       case t: TimeoutException => {
         Logger.error("Problem found in artist list process")
