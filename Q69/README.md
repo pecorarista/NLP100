@@ -3,7 +3,24 @@ Q69
 
 This application is written based on [playing-reactive-mongo](https://github.com/knoldus/playing-reactive-mongo).
 
-1. Import `artist.json` to MongoDB by running `scripts/import.sh`.
-2. Create indices by `mongo localhost:27017/nlp100 script/index.js`.
-3. Launch the server. Type `sbt "run <port_number>"`.
-4. Open `localhost:<port_number>` by your favorite browser.
+1. Edit `conf/application.conf` to designate `db.name` and `db.collection`.
+2. Import `artist.json` to MongoDB by running
+
+    ```bash
+    mongoimport \
+        --db=<db.name> \
+        --collection=<db.collection> \
+        --file=$(git rev-parse --show-toplevel)/src/main/resources/artist.json
+    ```
+
+3. Create indices by `mongo localhost:27017/<db.name> script/index.js`.
+
+    ```javascript
+    db.<db.collection>.createIndex({"name": 0});
+    db.<db.collection>.createIndex({"name": -1});
+    db.<db.collection>.({"rating.value": 1});
+    db.<db.collection>.({"rating.value": -1});
+    ```
+
+4. Launch the server. Type `sbt "run <port_number>"`.
+5. Open `localhost:<port_number>` by your favorite browser.

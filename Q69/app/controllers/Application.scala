@@ -28,8 +28,11 @@ class Application @Inject() (val reactiveMongoApi: ReactiveMongoApi, val message
 
   implicit val timeout = 10.seconds
 
-  val config = ConfigFactory.load()
-  def collection: Future[JSONCollection] = connection.database(config.getString("db.name")).map(_.collection[JSONCollection]("artists"))
+  val (dbName, collectionName) = {
+    val config = ConfigFactory.load()
+    (config.getString("db.name"), config.getString("db.collection"))
+  }
+  def collection: Future[JSONCollection] = connection.database(dbName).map(_.collection[JSONCollection](collectionName))
 
   import models._
 

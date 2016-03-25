@@ -1,7 +1,7 @@
 package models
 
 import play.api.libs.json.Json
-import play.modules.reactivemongo.json.BSONFormats._
+import reactivemongo.play.json._
 import reactivemongo.bson.BSONObjectID
 
 case class Page[A](items: Seq[A], page: Int, offset: Int, total: Int) {
