@@ -1,0 +1,15 @@
+---
+# vim:ft=ansible:
+- hosts: localhost
+  vars:
+    - ansible_python_interpreter: "/usr/bin/python2"
+  roles:
+    - update-pkgs
+    - wget/rhel
+    - git/rhel
+    - epel/rhel
+    - mecab
+    - redis
+    - sbt/rhel
+    - mongodb/rhel
+...

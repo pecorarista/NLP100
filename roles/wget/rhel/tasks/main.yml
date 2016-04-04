@@ -1,0 +1,7 @@
+---
+- name: Update packages
+  yum:
+    name: "wget"
+    state: latest
+  become: yes
+...

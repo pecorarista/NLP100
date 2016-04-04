@@ -1,0 +1,7 @@
+---
+- name: Update packages
+  yum:
+    name: "git"
+    state: latest
+  become: yes
+...

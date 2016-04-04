@@ -1,13 +1,17 @@
 # 言語処理100本ノック
 
 This is an implementation of
-[言語処理100本ノック](http://www.cl.ecei.tohoku.ac.jp/nlp100/)
+<a href="http://www.cl.ecei.tohoku.ac.jp/nlp100/" target="_blank">言語処理100本ノック</a>
 written in Scala.
 
 To run a code, install sbt and type the following command.
 ```
 sbt "run-main nlp100.chapter##.Q##"
 ```
+
+You can create an environment for this code using
+<a href="//docs.ansible.com/ansible/intro_installation.html" target="_blank">Ansible</a>.
+Run `ansible-playbook site.yml` on RHEL7.
 
 The 69th question requires a web application.
 I created one in the directory `Q69`.

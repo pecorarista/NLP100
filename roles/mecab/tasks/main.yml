@@ -1,0 +1,35 @@
+---
+- name: Install gcc-c++
+  yum:
+    name: "gcc-c++"
+    state: latest
+  become: yes
+- name: Check if MeCab exists
+  shell: which mecab
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  register: mecab
+  ignore_errors: True
+  changed_when: False
+  become: yes
+- name: Download MeCab
+  get_url:
+    url: "https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE"
+    dest: /tmp/mecab-0.996.tar.gz
+  become: yes
+  when: mecab|failed
+- name: Unpack MeCab
+  command: tar -xzvf /tmp/mecab-0.996.tar.gz -C /tmp
+  become: yes
+  when: mecab|failed
+- name: Install MeCab
+  shell: |
+    ./configure
+    make check
+    make
+    make install
+  args:
+    chdir: "/tmp/mecab-0.996"
+  become: yes
+  when: mecab|failed
+...

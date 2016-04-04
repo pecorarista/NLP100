@@ -1,0 +1,19 @@
+---
+- name: Copy bintray-sbt-rpm.repo
+  synchronize:
+    src: ../files/bintray-sbt-rpm.repo
+    dest: /etc/yum.repos.d/bintray-sbt-rpm.repo
+  become: yes
+- name: Install sbt
+  yum:
+    name: sbt
+    state: latest
+    enablerepo: bintray--sbt-rpm
+  become: yes
+- name: Install MongoDB
+  yum:
+    name: mongodb-org
+    state: latest
+    enablerepo: "mongodb-org-3.0"
+  become: yes
+...
