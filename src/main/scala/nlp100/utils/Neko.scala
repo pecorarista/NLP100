@@ -7,7 +7,9 @@ import scala.io.Source
 object Neko {
   case class Morph(surface: String, base: String, pos: String, pos1: String)
 
-  case class Chunk(morphs: Seq[Morph], dst: Int, srcs: Seq[Int])
+  case class Chunk(morphs: Seq[Morph], dst: Int, srcs: Seq[Int]) {
+    def toText(): String = this.morphs.map(_.surface).filter(! _.matches("[、，。．　]")).mkString
+  }
 
   type Sentence = Seq[Chunk]
 

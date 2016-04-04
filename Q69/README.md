@@ -13,7 +13,7 @@ This application is written based on [playing-reactive-mongo](https://github.com
         --file=$(git rev-parse --show-toplevel)/src/main/resources/artist.json
     ```
 
-3. Create indices by `mongo localhost:27017/<db.name> script/index.js`.
+3. Create indices by the following commands.
 
     ```javascript
     db.<db.collection>.createIndex({"name": 0});

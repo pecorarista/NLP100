@@ -15,10 +15,16 @@ do
 
     d=$SOURCE_CODES/"chapter"$i
 
-    if [ -d $d ]
+    if [ -d "$d" ]
     then
 
         PROGRESS=$(ls -1 $d | wc -l)
+
+        if [ "$i" == "07" ] && [ -d "$ROOT_DIR/Q69" ]
+        then
+            PROGRESS=$(($PROGRESS + 1))
+        fi
+
         for j in $(seq 1 10)
         do
             if [ $j -le $PROGRESS ]
