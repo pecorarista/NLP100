@@ -39,7 +39,7 @@ object Neko {
               description.split(',') match {
                 case Array(pos, pos1, _, _, _, _, _) =>
                   Morph(surface, "*", pos, pos1)
-                case Array(pos, pos1, _, _, _, _, base, _, _) =>
+                case Array(pos, pos1, _, _, _, _, base, _*) =>
                   Morph(surface, base, pos, pos1)
               }
             }
@@ -60,7 +60,7 @@ object Neko {
     for(l <- Source.fromURL(getClass.getResource("/neko.txt.cabocha")).getLines) {
       if(l.head == '*') {
         val (src, dst) = l.split(' ') match {
-          case Array(_, i, j, _, _) => (i.toInt, j.dropRight(1).toInt)
+          case Array(_, i, j, _*) => (i.toInt, j.dropRight(1).toInt)
         }
         deps += src -> dst
         if(ms.nonEmpty) {
@@ -86,7 +86,7 @@ object Neko {
             description.split(',') match {
               case Array(pos, pos1, _, _, _, _, _) =>
                 Morph(surface, "*", pos, pos1)
-              case Array(pos, pos1, _, _, _, _, base, _, _) =>
+              case Array(pos, pos1, _, _, _, _, base, _*) =>
                 Morph(surface, base, pos, pos1)
             }
           }
