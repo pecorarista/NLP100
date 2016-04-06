@@ -1,5 +1,5 @@
 ---
-- name: Update packages
+- name: Install Git
   yum:
     name: "git"
     state: latest

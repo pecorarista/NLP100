@@ -80,10 +80,28 @@
     insertbefore: "# End of file"
     dest: /etc/security/limits.conf
   become: yes
-- name: Restart MongoDB
-  service:
-    name: mongod
-    state: restarted
+- name: Reboot
+  command: shutdown -r 1
+  async: 0
+  poll: 0
   become: yes
   changed_when: False
+- name: Wait for connection to be down
+  wait_for:
+    host: "{{ ansible_ssh_host }}"
+    state: stopped
+    delay: 60
+    timeout: 20
+  connection: local
+  become: no
+  ignore_errors: True
+- name: Wait for connection to be up
+  wait_for:
+    host: "{{ ansible_ssh_host }}"
+    delay: 30
+    timeout: 60
+    state: started
+  connection: local
+  become: no
+  ignore_errors: True
 ...
