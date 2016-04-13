@@ -1,28 +1,36 @@
 ---
-- name: Install gcc-c++
-  yum:
-    name: "gcc-c++"
-    state: latest
-  become: yes
-- name: Check if MeCab exists
-  shell: which mecab
+- name: check if MeCab exists
+  shell: "mecab --version"
   environment:
     PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
   register: mecab
   ignore_errors: True
   changed_when: False
+- name: install gcc-c++ (Ubuntu)
+  apt:
+    pkg: "build-essential"
   become: yes
-- name: Download MeCab
+  when: mecab|failed and ansible_os_family == "Debian"
+- name: install gcc-c++ (RedHat)
+  yum:
+    name: "gcc-c++"
+    state: latest
+  become: yes
+  when: mecab|failed and ansible_os_family == "RedHat"
+- name: download MeCab
   get_url:
-    url: "https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOXlicTFaRUE"
+    url: "{{ mecab_url }}"
     dest: /tmp/mecab-0.996.tar.gz
   become: yes
   when: mecab|failed
-- name: Unpack MeCab
-  command: tar -xzvf /tmp/mecab-0.996.tar.gz -C /tmp
+- name: unpack MeCab
+  unarchive:
+    src: /tmp/mecab-0.996.tar.gz
+    dest: /tmp
+    copy: no
   become: yes
   when: mecab|failed
-- name: Install MeCab
+- name: install MeCab
   shell: |
     ./configure
     make check
@@ -30,6 +38,10 @@
     make install
   args:
     chdir: "/tmp/mecab-0.996"
+  become: yes
+  when: mecab|failed
+- name: update libraries
+  command: /sbin/ldconfig
   become: yes
   when: mecab|failed
 ...

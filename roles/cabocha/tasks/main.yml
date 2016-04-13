@@ -1,0 +1,87 @@
+---
+- name: check if CaboCha exists
+  shell: "cabocha --version"
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  register: cabocha
+  ignore_errors: True
+  changed_when: False
+- name: check if MeCab exists
+  shell: which mecab
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  changed_when: False
+  when: cabocha|failed
+- name: check if CRF++ exists
+  shell: "crf_learn --version"
+  environment:
+    PATH: "/usr/local/bin:{{ ansible_env.PATH }}"
+  register: crfplusplus
+  ignore_errors: True
+  changed_when: False
+  when: cabocha|failed
+- name: install gcc-c++ (Ubuntu)
+  apt:
+    pkg: "build-essential"
+  become: yes
+  when: (cabocha|failed or crfplusplus|failed) and ansible_os_family == "Debian"
+- name: install gcc-c++ (RedHat)
+  yum:
+    name: "gcc-c++"
+    state: latest
+  become: yes
+  when: (cabocha|failed or crfplusplus|failed) and ansible_os_family == "RedHat"
+- name: download CRF++
+  get_url:
+    url: "{{ crfplusplus_url }}"
+    dest: "/tmp/{{ crfplusplus_url | basename }}"
+  become: yes
+  when: crfplusplus|failed
+- name: unpack CRF++
+  unarchive:
+    src: "/tmp/{{ crfplusplus_url | basename }}"
+    dest: /tmp
+    copy: no
+  become: yes
+  when: crfplusplus|failed
+- name: install CRF++
+  shell: |
+    ./configure
+    make
+    make install
+  args:
+    chdir: "/tmp/{{ crfplusplus_url | basename | replace('.tar.gz', '') }}"
+  become: yes
+  when: crfplusplus|failed
+- name: update libraries
+  command: /sbin/ldconfig
+  become: yes
+  when: crfplusplus|failed
+- name: download CaboCha
+  get_url:
+    url: "{{ cabocha_url }}"
+    dest: "/tmp/{{ cabocha_url | basename }}"
+  become: yes
+  when: cabocha|failed
+- name: unpack CaboCha
+  unarchive:
+    src: "/tmp/{{ cabocha_url | basename }}"
+    dest: /tmp
+    copy: no
+  become: yes
+  when: cabocha|failed
+- name: install CaboCha
+  shell: |
+    ./configure
+    make check
+    make
+    make install
+  args:
+    chdir: "/tmp/{{ cabocha_url | basename | replace('.tar.bz2', '')}}"
+  become: yes
+  when: cabocha|failed
+- name: update libraries
+  command: /sbin/ldconfig
+  become: yes
+  when: cabocha|failed
+...
