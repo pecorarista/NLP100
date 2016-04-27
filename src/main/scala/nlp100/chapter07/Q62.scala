@@ -25,9 +25,9 @@ object Q62 extends App {
         ).length
       case _ => 0
     }
-    println(
-      """The number of artists whose "area" is Japan amounts to """ +
+  println(
+    """The number of artists whose "area" is Japan amounts to """ +
       Console.BOLD + Console.BLUE + n + Console.RESET + "."
-    )
+  )
 
 }

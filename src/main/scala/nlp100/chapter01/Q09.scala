@@ -7,7 +7,7 @@ object Q09 extends App {
   def typoglycemia(s: String): String =
     s.split(' ').map(
       w =>
-        if(w.length <= 4)
+        if (w.length <= 4)
           w
         else
           w.head + shuffle(w.toList.tail.init).mkString + w.last

@@ -11,20 +11,19 @@ object Q16 extends App {
   val POSITIVE_INT = "正の整数で入力してください"
   val TOO_LONG = s"全体の行数${ls.length}以下の数を入力してください。"
 
-  while(true) {
+  while (true) {
     println(s"いくつに分割して表示しますか。（最大${ls.length}）")
 
     val in: Either[Int, String] =
       try {
         val n = StdIn.readLine.toInt
-        if(n <= 0)
+        if (n <= 0)
           Right(POSITIVE_INT)
-        else if(n > ls.length)
+        else if (n > ls.length)
           Right(TOO_LONG)
         else
           Left(n)
-      }
-      catch {
+      } catch {
         case _: Exception => Right(POSITIVE_INT)
       }
 

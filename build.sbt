@@ -11,8 +11,8 @@ scalacOptions ++= Seq("-deprecation", "-unchecked", "-Xlint", "-Ywarn-unused-imp
 scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Ywarn-unused-import"))
 
 resolvers ++= Seq(
-    "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
-    "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
+  "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"
 )
 
 libraryDependencies ++= Seq(

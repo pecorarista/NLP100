@@ -7,7 +7,7 @@ import reactivemongo.bson.BSONDocument
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.StdIn
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 object Q67 extends App {
 
@@ -17,20 +17,20 @@ object Q67 extends App {
   val collection = database.collection("artists")
 
   print("aliases.name: ")
-  while(true) {
+  while (true) {
     val alias = StdIn.readLine
     collection.find(BSONDocument("aliases.name" -> alias))
       .cursor[Artist]().collect[List]() onComplete {
-      case Failure(e) => throw e
-      case Success(s) => {
-        if(s.length > 0)
-          s.foreach(println(_))
-        else
-          println("Not Found")
+        case Failure(e) => throw e
+        case Success(s) => {
+          if (s.length > 0)
+            s.foreach(println(_))
+          else
+            println("Not Found")
 
-        print("aliases.name: ")
+          print("aliases.name: ")
+        }
       }
-    }
   }
 
 }

@@ -8,11 +8,11 @@ import reactivemongo.api.indexes._
 import reactivemongo.api.indexes.IndexType.Text
 import reactivemongo.bson.BSONDocument
 import reactivemongo.core.commands.Count
-import scala.concurrent.{Future, Await}
+import scala.concurrent.{ Future, Await }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 import scala.io.Source
-import scala.util.{Failure, Success}
+import scala.util.{ Failure, Success }
 
 object Q64 extends App {
 
@@ -36,9 +36,9 @@ object Q64 extends App {
   ) onComplete {
       case Failure(e) => throw e
       case Success(b) => {
-        println(if(b) s"""Index "$indexName" was created.""" else s"""Index "$indexName" already exists.""")
+        println(if (b) s"""Index "$indexName" was created.""" else s"""Index "$indexName" already exists.""")
         driver.close()
       }
-  }
+    }
 
 }

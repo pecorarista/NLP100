@@ -8,7 +8,7 @@ object Neko {
   case class Morph(surface: String, base: String, pos: String, pos1: String)
 
   case class Chunk(morphs: Seq[Morph], dst: Int, srcs: Seq[Int]) {
-    def toText(): String = this.morphs.map(_.surface).filter(! _.matches("[、，。．　]")).mkString
+    def toText(): String = this.morphs.map(_.surface).filter(!_.matches("[、，。．　]")).mkString
   }
 
   type Sentence = Seq[Chunk]
@@ -27,13 +27,12 @@ object Neko {
     var ms = Queue.empty[Morph]
     var mss = Queue.empty[Seq[Morph]]
 
-    for(l <- Source.fromURL(getClass.getResource(file)).getLines) {
-      if(l.head != '*'){
-        if(l == "EOS") {
-            mss.enqueue(ms.toSeq)
-            ms = Queue.empty[Morph]
-        }
-        else {
+    for (l <- Source.fromURL(getClass.getResource(file)).getLines) {
+      if (l.head != '*') {
+        if (l == "EOS") {
+          mss.enqueue(ms.toSeq)
+          ms = Queue.empty[Morph]
+        } else {
           val m = l.split('\t') match {
             case Array(surface, description) => {
               description.split(',') match {
@@ -57,18 +56,17 @@ object Neko {
     var mss = Queue.empty[Queue[Morph]]
     var ss = Queue.empty[Sentence]
 
-    for(l <- Source.fromURL(getClass.getResource("/neko.txt.cabocha")).getLines) {
-      if(l.head == '*') {
+    for (l <- Source.fromURL(getClass.getResource("/neko.txt.cabocha")).getLines) {
+      if (l.head == '*') {
         val (src, dst) = l.split(' ') match {
           case Array(_, i, j, _*) => (i.toInt, j.dropRight(1).toInt)
         }
         deps += src -> dst
-        if(ms.nonEmpty) {
+        if (ms.nonEmpty) {
           mss.enqueue(ms)
           ms = Queue.empty[Morph]
         }
-      }
-      else if(l == "EOS") {
+      } else if (l == "EOS") {
         mss.enqueue(ms)
         val s = mss.zipWithIndex.map({
           case (ms, i) => {
@@ -79,8 +77,7 @@ object Neko {
         deps = Map.empty[Int, Int]
         ms = Queue.empty[Morph]
         mss = Queue.empty[Queue[Morph]]
-      }
-      else {
+      } else {
         val m = l.split('\t') match {
           case Array(surface, description) => {
             description.split(',') match {

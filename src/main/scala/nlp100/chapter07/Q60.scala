@@ -15,13 +15,14 @@ object Q60 {
     println("Preparing Data...")
 
     Source.fromURL(getClass.getResource("/artist.json")).getLines.foreach({
-      l => {
-        val json = Json.parse(l)
-        ((json \ "name").asOpt[String], (json \ "area").asOpt[String]) match {
-          case (Some(name), Some(area)) => client.set(name, area)
-          case _ => ()
+      l =>
+        {
+          val json = Json.parse(l)
+          ((json \ "name").asOpt[String], (json \ "area").asOpt[String]) match {
+            case (Some(name), Some(area)) => client.set(name, area)
+            case _ => ()
+          }
         }
-      }
     })
 
     println("Done")

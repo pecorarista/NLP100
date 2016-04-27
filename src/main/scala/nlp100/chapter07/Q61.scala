@@ -6,13 +6,12 @@ import scala.io.StdIn
 import scala.Console
 import com.typesafe.config.ConfigFactory
 
-
 object Q61 extends App {
 
   Q60.prepare
 
   val client = new RedisClient("localhost", ConfigFactory.load.getInt("redis.port"))
-  while(true) {
+  while (true) {
     print("name: ")
     client.get(StdIn.readLine) match {
       case Some(t) =>

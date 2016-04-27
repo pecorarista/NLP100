@@ -1,7 +1,7 @@
 package nlp100.chapter07
 
 import com.redis._
-import play.api.libs.json.Json.{stringify, toJson}
+import play.api.libs.json.Json.{ stringify, toJson }
 import scala.io.StdIn
 import scala.Console
 import com.typesafe.config._
@@ -17,7 +17,7 @@ object Q63 extends App {
   artists.foreach(
     artist => artist.tags match {
       case Some(ts) => {
-        if(ts.length > 0)
+        if (ts.length > 0)
           client.set(artist.name, stringify(toJson(ts)))
       }
       case _ => ()
@@ -25,7 +25,7 @@ object Q63 extends App {
   )
   println("Done")
 
-  while(true) {
+  while (true) {
     print("name: ")
     client.get(StdIn.readLine) match {
       case Some(t) =>
