@@ -4,10 +4,8 @@ import com.typesafe.config.ConfigFactory
 import reactivemongo.api.MongoDriver
 import reactivemongo.bson.BSONDocument
 import scala.util.{ Failure, Success }
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.Console
-import scala.io.StdIn
 
 object Q66 extends App {
 

@@ -4,9 +4,7 @@ import com.typesafe.config.ConfigFactory
 import nlp100.utils.Artists._
 import reactivemongo.api.MongoDriver
 import reactivemongo.bson.BSONDocument
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.io.StdIn
 import scala.util.{ Failure, Success }
 
 object Q68 extends App {

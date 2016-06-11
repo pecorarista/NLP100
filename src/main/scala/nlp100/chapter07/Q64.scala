@@ -3,15 +3,12 @@ package nlp100.chapter07
 import com.typesafe.config.ConfigFactory
 import nlp100.utils.Artists._
 import reactivemongo.api.MongoDriver
-import reactivemongo.api.commands.WriteResult
 import reactivemongo.api.indexes._
 import reactivemongo.api.indexes.IndexType.Text
 import reactivemongo.bson.BSONDocument
-import reactivemongo.core.commands.Count
 import scala.concurrent.{ Future, Await }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import scala.io.Source
 import scala.util.{ Failure, Success }
 
 object Q64 extends App {

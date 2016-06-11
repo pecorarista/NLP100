@@ -1,7 +1,6 @@
 package nlp100.chapter07
 
 import com.redis._
-import play.api.libs.json.Json
 import scala.io.StdIn
 import scala.Console
 import com.typesafe.config.ConfigFactory

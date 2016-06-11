@@ -1,6 +1,5 @@
 package nlp100.chapter02
 
-import java.io.PrintWriter
 import scala.io.Source
 
 object Q17 extends App {

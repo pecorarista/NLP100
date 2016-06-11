@@ -1,6 +1,5 @@
 package nlp100.chapter03
 
-import nlp100.utils.Countries.ukInfo
 import scala.xml.XML
 import scala.io.Source
 import java.net.URLEncoder
