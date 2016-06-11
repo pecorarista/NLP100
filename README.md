@@ -8,11 +8,6 @@ To run a code, install sbt and type the following command.
 ```
 sbt "run-main nlp100.chapter##.Q##"
 ```
-
-You can create an environment for this code using
-<a href="//docs.ansible.com/ansible/intro_installation.html" target="_blank">Ansible</a>.
-Run `ansible-playbook site.yml` on RHEL7.
-
 The 69th question requires a web application.
 I created one in the directory `Q69`.
 To run it, please have a look at `Q69/README.md`.
