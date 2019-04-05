@@ -15,13 +15,13 @@ $(RESOURCES)/hightemp.txt $(RESOURCES)/neko.txt $(RESOURCES)/nlp.txt $(RESOURCES
 	wget -P $(RESOURCES) $(NLP100)/$(shell basename $@)
 
 $(RESOURCES)/neko.txt.mecab: $(RESOURCES)/neko.txt
-	cd $(RESOURCES); cat neko.txt | sed -e '/^$/d' | mecab -o neko.txt.mecab
+	cd $(RESOURCES); cat neko.txt | sed -e '/^$$/d' | mecab -o neko.txt.mecab
 
 $(RESOURCES)/neko.txt.cabocha: $(RESOURCES)/neko.txt
-	cd $(RESOURCES); cat neko.txt | sed -e '/^$/d' | cabocha -f 1 -o neko.txt.cabocha
+	cd $(RESOURCES); cat neko.txt | sed -e '/^$$/d' | cabocha -f 1 -o neko.txt.cabocha
 
 $(RESOURCES)/jawiki-country.json: $(RESOURCES)/jawiki-country.json.gz
-	cd $(RESOURCES); gunzip $(basename $@).gz
+	cd $(RESOURCES); gunzip $(shell basename $@).gz
 
 $(RESOURCES)/artist.json: $(RESOURCES)/artist.json.gz
-	cd $(RESOURCES); gunzip $(basename $@).gz
+	cd $(RESOURCES); gunzip $(shell basename $@).gz
